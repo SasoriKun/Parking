@@ -1,6 +1,6 @@
 import React from "react";
 
-const Prueba = () => {
+const Registro = () => {
   return (
     <>
       <h2>Placa vehiculo</h2>
@@ -13,9 +13,27 @@ const Prueba = () => {
       </select>
       <br />
       <br />
-      <input type="button" value="Registrar" />
+      <input type="button" value="Registrar" onClick={validar} />
     </>
   );
 };
 
-export { Prueba };
+const Validacion = () => {
+  return (
+    <>
+      <h2>Id</h2>
+      <input type="text" name="idV" disabled></input>
+      <h2>Placa vehiculo</h2>
+      <input type="text" name="pVehi" disabled></input>
+      <h2>Tipo de vehiculo</h2>
+      <input type="text" name="tVehi" disabled></input>
+      <br />
+      <br />
+      <button onClick={validar}>Continuar</button>
+    </>
+  );
+};
+
+function validar() {}
+
+export { Registro, Validacion };
