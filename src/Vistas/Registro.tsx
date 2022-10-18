@@ -3,6 +3,9 @@ import React from "react";
 const Registro = () => {
   return (
     <>
+      <h2>Nombre del propietario</h2>
+      <input type="text" placeholder="Ingrese su nombre" />
+      <br />
       <h2>Placa vehiculo</h2>
       <input type="text" placeholder="Ingrese la placa del vehiculo" />
       <br />
