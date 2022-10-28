@@ -12,7 +12,7 @@ const Formulario = () => {
   );
 };
 
-const idTicket = () => {
+const IdTicket = () => {
   return (
     <>
       <h2>Id Ticket</h2>
@@ -32,4 +32,4 @@ const idTicket = () => {
   );
 };
 
-export { Formulario, idTicket };
+export { Formulario, IdTicket };

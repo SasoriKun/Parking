@@ -2,28 +2,31 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
 import { Registro, Validacion } from "./Vistas/Registro";
-import { Formulario, idTicket } from "./Vistas/Calculo";
+import { Formulario, IdTicket } from "./Vistas/Calculo";
 import { Pago } from "./Vistas/Pago";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [data, setData] = useState(null);
 
   return (
     <div>
       <div className="App fondo">
         <div>
-          <Registro></Registro>
+          <Registro onChangeData = {(objData) => {
+            setData(objData)
+          }} ></Registro>
         </div>
         <div className="margin">
-          <Validacion></Validacion>
+          <Validacion data={data} ></Validacion>
         </div>
       </div>
       <div>
         <Formulario></Formulario>
       </div>
       <div>
-        <idTicket></idTicket>
+        <IdTicket></IdTicket>
       </div>
+      <Pago></Pago>
     </div>
   );
 }
