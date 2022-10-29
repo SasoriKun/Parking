@@ -1,13 +1,44 @@
 import React from "react";
 
-const Formulario = () => {
+const Formulario = ({
+  onChangePosition,
+  arrayData = [],
+  eliminarTexoBuscar,
+}) => {
+  const [id, setId] = React.useState(null);
+
+  const onClick = () => {
+    const position = arrayData?.findIndex((element) => {
+      return element.id == id;
+    });
+
+    console.log("nuevo array: ", arrayData);
+
+    if (position != -1) {
+      onChangePosition(position);
+    } else {
+      alert("No encontre el ticket");
+    }
+  };
+
   return (
     <>
       <h2>Id ticket</h2>
-      <input type="text" placeholder="Ingrese su Id del ticket" />
+      <input
+        type="number"
+        placeholder="Ingrese su Id del ticket"
+        onChange={(e) => {
+          setId(e.target.value);
+        }}
+      />
       <br />
       <br />
-      <input type="button" value="Ticket" />
+      <input type="button" value="Buscar" onClick={() => onClick(id)} />
+      <input
+        type="button"
+        value="Eliminar"
+        onClick={() => eliminarTexoBuscar()}
+      />
     </>
   );
 };

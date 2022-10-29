@@ -1,18 +1,42 @@
 import React from "react";
 
-const Pago = () => {
+const Pago = ({ totalPago, positionSelected, eliminarDato }) => {
+  const [valorIngresado, setValorIngresado] = React.useState();
+
+  const onPago = () => {
+    if (valorIngresado < totalPago) {
+      alert("No te alcanza");
+      return;
+    }
+
+    if (valorIngresado === totalPago) {
+      alert("Pagaste el parqueadero");
+      eliminarDato(positionSelected);
+      return;
+    }
+
+    if (valorIngresado > totalPago) {
+      alert(
+        `Pagaste el parqueadero, su devuelto es: ${valorIngresado - totalPago}`
+      );
+      eliminarDato(positionSelected);
+      return;
+    }
+  };
+
   return (
     <>
-      <h2>Id Ticket</h2>
-      <input type="text" placeholder="Ingrese su Id del ticket a pagar" />
       <h2>Dinero a depositar</h2>
       <input
-        type="text"
+        type="number"
         placeholder="Ingrese la cantidad de dinero solicitada"
+        onChange={(e) => {
+          setValorIngresado(parseInt(e.target.value));
+        }}
       />
       <br />
       <br />
-      <input type="button" value="Pagar" />
+      <input type="button" value="Pagar" onClick={() => onPago()} />
     </>
   );
 };

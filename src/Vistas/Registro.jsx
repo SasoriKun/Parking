@@ -1,26 +1,70 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import moment from "moment";
 
-const Registro = ({onChangeData}) => {
+const Registro = ({ onChangeData, dataArray = [] }) => {
+  console.log("Llego y vea su data: ", dataArray);
   const [data, setdata] = useState({ tipo: "Automovil" });
+  const [arrayData, setArrayData] = useState(dataArray);
+
+  useEffect(() => {
+    console.log("oiga llego");
+    setArrayData(dataArray);
+  }, [dataArray]);
 
   const validar = () => {
     const dataSend = {
       ...data,
-      fecha: new Date()
-    }
-    console.log("Datos a enviar ", dataSend);
-    onChangeData(dataSend)
-    setdata({tipo:"Automovil"})
+      id:
+        arrayData.length == 0
+          ? 1
+          : parseInt(arrayData[arrayData.length - 1].id) + 1,
+      fecha: new Date(),
+    };
+    debugger;
+    const allData = [...arrayData, dataSend];
+    // const allData = [
+    //   {
+    //     id: 1,
+    //     tipo: "Automovil",
+    //     nombre: "juan hdez",
+    //     placa: "abc123",
+    //     fecha: " Sat Oct 29 2022 17:50:33 GMT-0500 (hora estándar de Colombia)",
+    //   },
+    //   {
+    //     id: 2,
+    //     tipo: "Automovil",
+    //     nombre: "pepe",
+    //     placa: "jhg354",
+    //     fecha: "Sat Oct 29 2022 17:50:40 GMT-0500 (hora estándar de Colombia)",
+    //   },
+    //   {
+    //     id: 3,
+    //     tipo: "Motocicleta",
+    //     nombre: "lolo",
+    //     placa: "987hbg",
+    //     fecha: "Sat Oct 29 2022 17:50:50 GMT-0500 (hora estándar de Colombia)",
+    //   },
+    //   {
+    //     id: 4,
+    //     tipo: "Automovil",
+    //     nombre: "hylary",
+    //     placa: "651452",
+    //     fecha: "Sat Oct 29 2022 17:51:13 GMT-0500 (hora estándar de Colombia)",
+    //   },
+    // ];
+    setArrayData(allData);
+    onChangeData(allData);
+    setdata({ tipo: "Automovil" });
   };
 
   return (
     <>
       <h2>Nombre del propietario</h2>
-      <input value={data?.nombre}
+      <input
+        value={data?.nombre || ""}
         type="text"
         placeholder="Ingrese su nombre"
         onChange={(e) => {
-          console.log(e.target.value);
           setdata({
             ...data,
             nombre: e.target.value,
@@ -30,11 +74,10 @@ const Registro = ({onChangeData}) => {
       <br />
       <h2>Placa vehiculo</h2>
       <input
-        value={data?.placa}
+        value={data?.placa || ""}
         type="text"
         placeholder="Ingrese la placa del vehiculo"
         onChange={(e) => {
-          console.log(e.target.value);
           setdata({
             ...data,
             placa: e.target.value,
@@ -44,10 +87,9 @@ const Registro = ({onChangeData}) => {
       <br />
       <h2>Tipo de vehiculo</h2>
       <select
-      value={data.tipo}
+        value={data.tipo}
         name="TipoV"
         onChange={(e) => {
-          console.log(e.target.value);
           setdata({
             ...data,
             tipo: e.target.value,
@@ -64,25 +106,80 @@ const Registro = ({onChangeData}) => {
   );
 };
 
-const Validacion = ({data}) => {
-  console.log("llego ", data) 
-    return (
-      <>
-        <h2>Id</h2>
-        <input type="text" name="idV" disabled></input>
-        <h2>Nombre del usuario</h2>
-        <input type="text" name="nombreV" disabled value={data?.nombre}></input>
-        <h2>Placa vehiculo</h2>
-        <input type="text" name="pVehi" disabled value={data?.placa}></input>
-        <h2>Tipo de vehiculo</h2>
-        <input type="text" name="tVehi" disabled value={data?.tipo}></input>
-        <h2>Fecha</h2>
-        <input type="text" name="fechaV" disabled value={data?.fecha}></input>
-        <br />
-        <br />
-        <button>Continuar</button>
-      </> 
-    );
+const Validacion = ({ arrayData, positionSelected, totalPago }) => {
+  console.log("array ", arrayData);
+  const data = arrayData[positionSelected];
+  const dateOut = moment(new Date());
+  // const [total, settotal] = useState(0);
+  let total = 0;
+
+  // useEffect(() => {
+  // debugger;
+  if (data) {
+    const duration = moment.duration(dateOut.diff(data?.fecha));
+    const minutes = duration.asMinutes();
+
+    const valorMinutoAutomovil = 2000;
+    const valorMinutoMotocicleta = 1000;
+
+    if (data?.tipo == "Automovil") {
+      total = parseInt(valorMinutoAutomovil * minutes);
+    } else {
+      total = parseInt(valorMinutoMotocicleta * minutes);
+    }
+    totalPago(total);
+  }
+
+  // const total
+  // }, []);
+
+  return (
+    <>
+      <h2>Id</h2>
+      <input type="text" name="idV" disabled value={data?.id || ""}></input>
+      <h2>Nombre del usuario</h2>
+      <input
+        type="text"
+        name="nombreV"
+        disabled
+        value={data?.nombre || ""}
+      ></input>
+      <h2>Placa vehiculo</h2>
+      <input
+        type="text"
+        name="pVehi"
+        disabled
+        value={data?.placa || ""}
+      ></input>
+      <h2>Tipo de vehiculo</h2>
+      <input type="text" name="tVehi" disabled value={data?.tipo || ""}></input>
+      <h2>Hora Entrada</h2>
+      <input
+        type="text"
+        name="fechaV"
+        disabled
+        value={(data && moment(data?.fecha).format("LT")) || ""}
+      ></input>
+      <h2>Hora salida</h2>
+      <input
+        type="text"
+        name="fechaS"
+        disabled
+        value={(data && dateOut.format("LT")) || ""}
+      ></input>
+      <h2>Total a pagar</h2>
+      {total ? (
+        <input
+          type="text"
+          name="tPago"
+          disabled
+          value={(total && `$${total}`) || ""}
+        />
+      ) : null}
+      <br />
+      <br />
+    </>
+  );
 };
 
 export { Registro, Validacion };
